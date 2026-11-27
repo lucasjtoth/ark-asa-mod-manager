@@ -1,6 +1,6 @@
-# 🦖 ARK: Survival Ascended – Singleplayer Mod & Game.ini Manager (v10.14)
+# 🦖 ARK: Survival Ascended – Singleplayer Mod & Game.ini Manager (v10.16)
 
-A lightweight, **100% client-side** single-file HTML utility for managing your `GameUserSettings.ini` Mod Load Order, `Game.ini` Engram/Crafting Overrides, UE5 Spawn Commands, and Custom Loot Pools (`ConfigAddSupplyCrateItems`) in **ARK: Survival Ascended**.
+A lightweight, **100% client-side** single-file HTML utility for managing your `GameUserSettings.ini` Mod Load Order, `Game.ini` Engram/Crafting Overrides, UE5 Spawn Commands, and Additive Loot Pools (`ConfigOverrideSupplyCrateItems` with `bAppendItemSets=True`) in **ARK: Survival Ascended**.
 
 ---
 
@@ -19,14 +19,14 @@ This project was built via **vibecoding** (AI-assisted development) out of real-
 
 The entire application lives inside a **single standalone `.html` file** — no installation, no accounts, and no internet connection required. Using the modern **File System Access API**, you can link it directly to your local ARK files on disk.
 
-- **Built for Singleplayer, usable on Dedicated Servers:** While designed around local Singleplayer file paths (`GameUserSettings.ini`, `Game.ini`, `library.json`, and folder `83374`), **experienced server admins can easily use it too**. All generated rules (`ActiveMods=`, `OverrideNamedEngramEntries`, `ConfigOverrideItemCraftingCosts`, and `ConfigAddSupplyCrateItems`) follow 100% standard UE5/ASA syntax. Simply scan the mods installed on your PC client, configure your rules visually, and copy-paste the generated output blocks straight into your server's config files (Nitrado, self-hosted, etc.).
+- **Built for Singleplayer, usable on Dedicated Servers:** While designed around local Singleplayer file paths (`GameUserSettings.ini`, `Game.ini`, `library.json`, and folder `83374`), **experienced server admins can easily use it too**. All generated rules (`ActiveMods=`, `OverrideNamedEngramEntries`, `ConfigOverrideItemCraftingCosts`, and `ConfigOverrideSupplyCrateItems`) follow 100% standard UE5/ASA syntax. Simply scan the mods installed on your PC client, configure your rules visually, and copy-paste the generated output blocks straight into your server's config files (Nitrado, self-hosted, etc.).
 
 ---
 
 ## ✨ Key Features (3-in-1 Workspace)
 
 ### 📦 1. Mod Manager & Smart Load Order (`GameUserSettings.ini` + `library.json`)
-- **Direct Catalog Sync:** Reads your installed CurseForge mods directly from `library.json` (including mod names, authors, summaries, and thumbnails) and automatically hides pure *Custom Cosmetics* and standalone *Maps* that do not belong in `ActiveMods=`.
+- **Direct Catalog Sync & Uninstalled Mod Detection:** Reads your installed CurseForge mods directly from `library.json` (including mod names, authors, summaries, and thumbnails) and automatically hides pure *Custom Cosmetics* and standalone *Maps* that do not belong in `ActiveMods=`. If a mod in `ActiveMods=` was uninstalled in-game (wiping it from `library.json`), the app flags it with a warning badge, displays its remembered previous name, and lets you remove missing IDs in 1 click.
 - **7 Logical Load Order Tiers:** Automatically categorizes mods into 7 priority tiers (*1. Overhaul ➔ 2. Official Events ➔ 3. Stacking & Core Loot ➔ 4. Creatures, Spawns & Taming ➔ 5. Structures, Storage & Logistics ➔ 6. Rebalance, Weapons & QoL ➔ 7. Decor, Furniture & Music*).
 - **1-Click Sorting & Profiles:** Auto-sort your entire load order with one click, reorder via Drag & Drop, save custom mod profiles in your browser, and toggle official seasonal events (*Fear Ascended, Winter Wonderland, Summer Bash*, etc.) via the **Official Event Switcher**.
 
@@ -37,7 +37,7 @@ The entire application lives inside a **single standalone `.html` file** — no 
 - **Batch Spawner:** Copy full UE5 Blueprint spawn commands (`cheat giveitem "Blueprint'..."` / `SpawnDino`), pipe-separated (`|`) batch commands, or download `exec spawn_batch.txt` files.
 
 ### 🎁 3. Visual Loot Pool Manager: Beacons, Caves, Treasures, Dino Drops & Mystery Crates (`Game.ini`)
-- **Safe Additive Loot (`ConfigAddSupplyCrateItems`):** Appends custom item sets to selected supply crates and dino drops without overwriting or breaking default vanilla loot tables.
+- **Safe Additive Loot (`ConfigOverrideSupplyCrateItems` + `bAppendItemSets=True`):** Appends custom item sets to selected supply crates and dino drops without overwriting or breaking default vanilla loot tables, and automatically merges multiple pools assigned to the same crate into a single valid `ItemSets=(...)` line.
 - **Comprehensive Drop Targets:** Supports standard & Double (Ringed) Beacons, Cave/Ocean/Desert crates, Giant Beaver Dams, Extinction OSDs, *Lost Colony* & *Genesis Part 1* crates, **Bob's Tall Tales Buried Treasures**, **Alpha Predator & Carnivore Dino Drops** (including auto-detected modded and event dino drops), plus a dedicated 2-step configurator for the **Mystery Crates** mod.
 - **Hidden Engram ➔ Loot Blueprint Workflow:** Hide an engram in Tab 2 and click **📜 Add to Loot (BP)** to make it drop as a craftable Blueprint in crates. Built-in smart safeguards ensure resources/consumables never drop as broken blueprints and apply quality tiers (*Ramshackle – Ascendant*) only to weapons, armor, and saddles.
 - **Draft Pools & Undo/Redo:** Save work-in-progress pools as **Drafts** (excluded from `Game.ini` until activated) and use up to 10 steps of **Undo / Redo** (`Ctrl+Z` / `Ctrl+Y`).
@@ -54,7 +54,7 @@ The entire application lives inside a **single standalone `.html` file** — no 
 - **Zero-install browser workflow:** Everything runs in a single `.html` file and non-invasively updates only your active mods, engram overrides, crafting recipes, and additive loot lines while leaving the rest of your `Game.ini` (breeding, stats, XP multipliers) untouched.
 
 **When you should use Beacon instead:**
-- **Full Loot Table Replacement (`ConfigOverrideSupplyCrateItems`):** If you want to completely wipe vanilla supply crates from scratch and use a detailed drop-probability simulator, Beacon is the best tool for the job. This manager strictly uses `ConfigAddSupplyCrateItems` (safely *appending* your custom item sets to existing vanilla loot).
+- **Full Loot Table Replacement (without `bAppendItemSets=True`):** If you want to completely wipe vanilla supply crates from scratch and use a detailed drop-probability simulator, Beacon is the best tool for the job. This manager uses `ConfigOverrideSupplyCrateItems` strictly with `bAppendItemSets=True` (safely *appending* your custom item sets to existing vanilla loot).
 - **Wild Dino Biome Spawn Editing (`NPCSpawnEntries`):** Adjusting which wild creatures spawn in specific map biomes is not supported here.
 - **Visual Sliders for Server Multipliers & Direct Cloud/Nitrado Deploys:** For visual rate sliders (breeding, XP, stats) and automated FTP/API server deployments, use Beacon *(though this manager includes built-in raw text editors for quick manual edits to both `.ini` files)*.
 
@@ -80,13 +80,13 @@ Byl od základu postavený pro **Singleplayer hráče**, které nebaví slepě l
 
 ### 💡 Singleplayer vs. Dedikovaný server
 Nástroj primárně počítá s lokálními soubory Singleplayeru (`GameUserSettings.ini`, `Game.ini`, `library.json` a složka modů `83374`). **Teoreticky ho ale bez problémů využije i admin dedikovaného serveru, který ví, co dělá:**
-- Veškerá vygenerovaná pravidla pro `Game.ini` (`OverrideNamedEngramEntries`, `ConfigOverrideItemCraftingCosts`, `ConfigAddSupplyCrateItems`) i seznam `ActiveMods=` používají 100% standardní syntaxi Unreal Enginu 5 / ASA.
-- Pokud máte mody stažené u sebe v PC (ve svém klientovi), můžete si v manageru naskenovat svou složku `83374`, naklikat si recepty, engramy a loot pooly, a výsledné vygenerované bloky ze spodního okna (nebo přes tlačítko *Copy Generated Lines*) jednoduše zkopírovat na svůj server (Nitrado, vlastní stroj atd.).
+- Veškerá vygenerovaná pravidla pro `Game.ini` (`OverrideNamedEngramEntries`, `ConfigOverrideItemCraftingCosts`, `ConfigOverrideSupplyCrateItems`) i seznam `ActiveMods=` používají 100% standardní syntaxi Unreal Enginu 5 / ASA.
+- Pokud máte mody stažené u sebe v PC (ve svém klientovi), můžete si v manageru naskenovat svou složku `83374`, naklikat si recepty, engramy a loot pooly, a výsledné vygenerované bloky ze spodního okna (nebo přes tlačítko *Kopírovat vygenerované řádky*) jednoduše zkopírovat na svůj server (Nitrado, vlastní stroj atd.).
 
 ### ✨ Co všechno program umí (3 hlavní pilíře)
 
 - **1. Mod Manager & Chytrý Load Order (`GameUserSettings.ini` + `library.json`)**
-  - Načte vaše stažené mody přímo z `library.json` (včetně názvů, autorů a ikonek) a automaticky skryje čistou kosmetiku (*Custom Cosmetics*) a samostatné mapy, které do `ActiveMods=` v GUS.ini nepatří.
+  - Načte vaše stažené mody přímo z `library.json` (včetně názvů, autorů a ikonek) a automaticky skryje čistou kosmetiku (*Custom Cosmetics*) a samostatné mapy, které do `ActiveMods=` v GUS.ini nepatří. Pokud v `ActiveMods=` zůstane ID modu, který byl odinstalován ve hře (a zmizel z `library.json`), program ho zvýrazní varováním, zobrazí jeho dříve známý název a nabídne jeho odebrání jedním klikem.
   - Automaticky roztřídí mody do **7 logických skupin (Tiers 1–7)**: *1. Overhaul* ➔ *2. Official Events* ➔ *3. Stacking & Core Loot* ➔ *4. Creatures & Spawns* ➔ *5. Structures & Storage* ➔ *6. Weapons & QoL* ➔ *7. Decor & Music*.
   - Umožňuje seřadit mody jedním klikem, přetahovat je myší (Drag & Drop), ukládat si různé profily modů v prohlížeči a jedním klikem zapínat oficiální sezónní eventy (*Fear Ascended, Winter Wonderland, Summer Bash* atd.).
 - **2. Lokální skener modů (`83374`) + Editor Engramů, Receptů a Spawnů (`Game.ini`)**
@@ -95,7 +95,7 @@ Nástroj primárně počítá s lokálními soubory Singleplayeru (`GameUserSett
   - Jedním klikem můžete skrýt engramy (`🔒 Skrýt`), nastavit jim 0 EP / Level 1, změnit crafting recept na `1x Thatch` nebo v editoru naklikat vlastní recept z jakýchkoliv vanilla či modovaných surovin (včetně chytrého hlídání exkluzivních surovin z jiných map a kontroly, zda máte aktivní QoL Grinder mod jako CS/B+).
   - Generuje plné UE5 spawn příkazy (`cheat giveitem "Blueprint'..."` / `SpawnDino`), umí je spojit přes svislítko (`|`) pro hromadné spawnování nebo vyexportovat jako dávkový `exec spawn_batch.txt` soubor.
 - **3. Loot Manager: Beacony, Jeskyně, Bobovy Poklady, Dino Dropy & Mystery Crates (`Game.ini`)**
-  - Využívá bezpečnou direktivu `ConfigAddSupplyCrateItems` – přidává vaše vlastní loot balíčky do truhel a dropů, aniž by rozbil nebo smazal původní vanilla loot.
+  - Využívá bezpečnou direktivu `ConfigOverrideSupplyCrateItems` s parametrem `bAppendItemSets=True` (a automatickým slučováním více balíčků pro stejnou truhlu do jednoho řádku) – přidává vaše vlastní loot balíčky do truhel a dropů, aniž by rozbil nebo smazal původní vanilla loot.
   - Podporuje běžné i dvojité (Ringed) Beacony, jeskynní a oceánské bedny, OSD, bedny z *Lost Colony* a *Genesis 1*, **zakopané poklady z Bob's Tall Tales** (*Buried Treasures*), **dropy z Alfa predátorů a dinosaurů** (včetně automaticky detekovaných dino dropů z vašich modů a eventů) a má přímou dvoukrokovou integraci pro populární mod *Mystery Crates*.
   - **Chytrá pojistka pro skryté engramy a Blueprinty:** Můžete v Záložce 2 skrýt jakýkoliv engram a jedním klikem (*📜 Do Lootu (BP)*) ho poslat do beden jako 100% Blueprint. Pojistka automaticky pohlídá, aby se suroviny nebo konzumovatelné věci nikdy nesnažily padnout jako nefunkční blueprint, a kvalitu (*Ramshackle – Ascendant*) aplikuje jen na zbraně, zbroj a sedla.
   - **Koncepty (Drafts) a historie kroků:** Rozdělaný loot pool si můžete uložit nanečisto (*Uložit jako koncept*), takže se nezapíše do `Game.ini`, dokud ho neaktivujete, a nechybí ani historie kroků Zpět/Vpřed (`Ctrl+Z` / `Ctrl+Y`).
@@ -110,7 +110,7 @@ Program **Beacon** je špičkový a v komunitě zaslouženě populární nástro
 - **Okamžitý běh v prohlížeči bez instalace:** Jde o jeden `.html` soubor, který neinvazivně upravuje pouze řádky s mody, engramy, recepty a přidaným lootem, zatímco zbytek vašeho `Game.ini` (breeding, staty, XP) nechává nedotčený.
 
 **Kdy naopak sáhnout po programu Beacon:**
-- **Kompletní přepis (úplné nahrazení) vanilla lootu (`ConfigOverrideSupplyCrateItems`):** Pokud chcete kompletně smazat a od nuly přepsat celý původní obsah dropu včetně detailní simulace pravděpodobností, Beacon je na to ideální. Tento manager používá výhradně `ConfigAddSupplyCrateItems` (tedy bezpečné *přidávání* vlastních setů k existujícímu lootu).
+- **Kompletní přepis (úplné nahrazení) vanilla lootu (bez `bAppendItemSets=True`):** Pokud chcete kompletně smazat a od nuly přepsat celý původní obsah dropu včetně detailní simulace pravděpodobností, Beacon je na to ideální. Tento manager používá `ConfigOverrideSupplyCrateItems` výhradně s `bAppendItemSets=True` (tedy bezpečné *přidávání* vlastních setů k existujícímu lootu).
 - **Úprava spawnů divokých dinosaurů v biomech (`ConfigAddNPCSpawnEntriesContainer`):** Úpravu toho, jací dinosauři se v jakém biomu spawní, tento nástroj neobsahuje.
 - **Grafické posuvníky herních násobičů a přímý Nitrado/FTP upload:** Pro vizuální ladění rychlostí ochočování, líhnutí či statů a přímé nahrávání na server přes API využijte Beacon *(své stávající hodnoty v `Game.ini` a `GUS.ini` ale můžete kdykoliv zkontrolovat a upravit přes vestavěný Textový editor přímo v této aplikaci)*.
 
