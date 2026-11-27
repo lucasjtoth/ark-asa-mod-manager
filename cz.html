@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARK: Survival Ascended – Singleplayer Mod & Game.ini Manager (v10.14)</title>
+<title>ARK: Survival Ascended – Singleplayer Mod & Game.ini Manager (v10.16)</title>
 <style>
   :root {
     --bg-main: #0f141c;
@@ -812,7 +812,7 @@
 
 <header>
   <div class="title-wrap">
-    <h1>🦖 ARK: Survival Ascended — Singleplayer Mod & Game.ini Manager (v10.14)</h1>
+    <h1>🦖 ARK: Survival Ascended — Singleplayer Mod & Game.ini Manager (v10.16)</h1>
     <p>Kompletní správa Load Orderu v <code>GameUserSettings.ini</code> + Engramů, Craftingu a UE5 Spawn příkazů v <code>Game.ini</code></p>
   </div>
   <div class="btn-row">
@@ -1109,7 +1109,7 @@
 </div>
 
 <!-- ========================================================================== -->
-<!-- ZÁLOŽKA 3: POKLADY, MYSTERY CRATES & LOOT POOLY (ConfigAddSupplyCrateItems)-->
+<!-- ZÁLOŽKA 3: POKLADY, MYSTERY CRATES & LOOT POOLY (ConfigOverrideSupplyCrateItems + bAppendItemSets=True)-->
 <!-- ========================================================================== -->
 <div id="tabSectionLoot" class="tab-section">
   <div class="path-box" id="mysteryCratesStatusBanner" style="margin-bottom: 14px; border-left: 4px solid var(--accent);">
@@ -1128,11 +1128,11 @@
           <div class="btn-row">
             
             <button class="btn-success" onclick="saveGameIniFile()" title="Zapíše engramy, recepty i tyto Loot Balíčky přímo do Game.ini">💾 Uložit do Game.ini</button>
-            <button class="btn-danger" onclick="clearAllLootPools()" title="Odstraní všechny přidané ConfigAddSupplyCrateItems balíčky">Vymazat vše</button>
+            <button class="btn-danger" onclick="clearAllLootPools()" title="Odstraní všechny přidané Loot balíčky (ConfigOverrideSupplyCrateItems)">Vymazat vše</button>
           </div>
         </div>
         <p style="font-size:0.78rem; color:var(--text-muted);">
-          Využívá direktivu <code>ConfigAddSupplyCrateItems</code> — bezpečně přidává nové položky k vybraným truhlám a dropům, aniž by mazala jejich původní obsah.
+          Využívá direktivu <code>ConfigOverrideSupplyCrateItems</code> s parametrem <code>bAppendItemSets=True</code> — bezpečně přidává nové položky k vybraným truhlám a dropům (a slučuje více balíčků pro stejnou truhlu do jednoho řádku), aniž by mazala původní obsah.
         </p>
         <div class="search-row">
           <input type="text" id="lootPoolsSearch" placeholder="Hledat v uložených loot balíčcích, truhlách nebo položkách..." oninput="renderLootPoolsTab()" style="flex:1;">
@@ -1204,7 +1204,7 @@
   </div>
   <div class="output-bar">
     <div class="panel-title-row">
-      <strong>Náhled generovaných <code>ConfigAddSupplyCrateItems</code> řádků pro <code>Game.ini</code>:</strong>
+      <strong>Náhled generovaných <code>ConfigOverrideSupplyCrateItems</code> řádků (<code>bAppendItemSets=True</code>) pro <code>Game.ini</code>:</strong>
       <div class="btn-row">
         <button onclick="copyLootIniLinesOnly()">📋 Kopírovat jen Loot řádky</button>
         <button class="btn-success" onclick="saveGameIniFile()">💾 Uložit vše do Game.ini</button>
@@ -1217,7 +1217,7 @@
 <div class="modal-backdrop" id="lootPoolModal" onmousedown="this._bgDown=(event.target===this)" onclick="if(event.target===this && this._bgDown) closeLootPoolModal()">
   <div class="modal-content" style="max-width: 880px;">
     <div class="modal-header">
-      <h2 id="lootModalTitle">🎁 Nastavit Loot Balíček (ConfigAddSupplyCrateItems)</h2>
+      <h2 id="lootModalTitle">🎁 Nastavit Loot Balíček (ConfigOverrideSupplyCrateItems)</h2>
       <button class="btn-danger" onclick="closeLootPoolModal()">✖ Zavřít</button>
     </div>
     <div class="modal-body">
@@ -1720,7 +1720,7 @@
         <h3><span>💡 4. Další užitečná varování z praxe</span> <span class="tag tier-7">Tipy</span></h3>
         <div class="tier-examples" style="margin-top:8px; line-height:1.55;">
           • <b>Odebírání modů z rozehraného savu:</b> Pokud z <code>ActiveMods=</code> odebereš mod, ze kterého už máš ve světě postavené stavby, uložené předměty nebo ochočené dinosaury, po načtení hry nenávratně zmizí.<br>
-          • <b>Testování změn v truhlách a dropech:</b> Úpravy <code>ConfigAddSupplyCrateItems</code> se ve hře projeví až u <b>nově spawnovaných</b> truhel a dinosaurů (ne u těch, které už na mapě existovaly před úpravou – ve hře můžeš použít příkaz <code>cheat DestroyWildDinos</code>).<br>
+          • <b>Testování změn v truhlách a dropech:</b> Úpravy <code>ConfigOverrideSupplyCrateItems</code> se ve hře projeví až u <b>nově spawnovaných</b> truhel a dinosaurů (ne u těch, které už na mapě existovaly před úpravou – ve hře můžeš použít příkaz <code>cheat DestroyWildDinos</code>).<br>
           • <b>Paměť prohlížeče:</b> Koncepty balíčků a profily se ukládají do <code>localStorage</code> daného prohlížeče. Při promazání dat prohlížeče (CCleaner apod.) o uložené profily v prohlížeči přijdeš.
         </div>
       </div>
@@ -2018,6 +2018,8 @@
   let lastLibMtime = 0;
   let hasUnsavedUiChanges = false;
   let dragSrcIndex = null;
+  let hasLoadedLibraryJson = false;
+  let knownModNames = {};
 
   // Stav pro Záložku 2 (Game.ini + Složka 83374)
   let gameIniRawContent = "";
@@ -2842,6 +2844,11 @@
       });
 
       modDatabase = updatedDb;
+      hasLoadedLibraryJson = true;
+      Object.values(updatedDb).forEach(m => {
+        if (m && m.id && m.name && m.id !== 'VANILLA_ARK') knownModNames[m.id] = m.name;
+      });
+      try { localStorage.setItem('asa_known_mod_names_v10', JSON.stringify(knownModNames)); } catch(e) {}
 
       const status = document.getElementById('libStatus');
       status.textContent = isDirect
@@ -2949,27 +2956,55 @@
     }
   }
 
+  function removeMissingLibraryMods() {
+    if (!hasLoadedLibraryJson) return;
+    const missing = activeMods.filter(id => !modDatabase[id]);
+    if (missing.length === 0) return;
+    if (!confirm(`Opravdu chceš odebrat ${missing.length} mód(y), které chybí v library.json, ze seznamu ActiveMods?\n\nID: ${missing.join(', ')}\n\n(Změnu můžeš kdykoliv vrátit tlačítkem ↩️ Zpět nebo Ctrl+Z.)`)) return;
+    pushHistorySnapshot("Odebrání odinstalovaných módů");
+    activeMods = activeMods.filter(id => !!modDatabase[id]);
+    hasUnsavedUiChanges = true;
+    syncEventDropdownWithActive();
+    renderAll();
+    showToast(`\uD83E\uDDF9 Odebráno ${missing.length} odinstalovaných/chybějících módů z ActiveMods!`);
+  }
   function renderActiveMods() {
     const container = document.getElementById('activeModList');
     const query = document.getElementById('activeSearch').value.toLowerCase().trim();
     document.getElementById('activeCount').textContent = activeMods.length;
     container.innerHTML = '';
-
     if (activeMods.length === 0) {
       container.innerHTML = `<div style="padding:28px;text-align:center;color:var(--text-muted);">
         Zatím nejsou načtené žádné aktivní módy.<br><br>
-        Klikni nahoře na <b>„🔗 Propojit GUS.ini“</b>, nebo si naklikej herní módy z pravého katalogu.
+        Klikni nahoře na <b>„&#128279; Propojit GUS.ini“</b>, nebo si naklikej herní módy z pravého katalogu.
       </div>`;
       return;
     }
-
+    if (hasLoadedLibraryJson) {
+      const missingIds = activeMods.filter(id => !modDatabase[id]);
+      if (missingIds.length > 0) {
+        const warnBanner = document.createElement('div');
+        warnBanner.style = "background:rgba(153,27,27,0.22); border:1px solid rgba(239,68,68,0.65); border-radius:8px; padding:9px 12px; font-size:0.78rem; color:#fecaca; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;";
+        warnBanner.innerHTML = `
+          <div style="flex:1; min-width:220px;">
+            <b>⚠️ ${missingIds.length} mód(y) v <code>ActiveMods=</code> chybí v <code>library.json</code></b><br>
+            <span style="color:#cbd5e1;">Pokud byl mód odinstalován ve hře, hra smaže jeho název, ikonu i popis z <code>library.json</code>, takže je nelze načíst ani určit kategorii (případně mód ještě není stažený).</span>
+          </div>
+          <button class="btn-danger icon-btn" onclick="removeMissingLibraryMods()" title="Odebere ze seznamu ActiveMods všechny módy, které chybí v library.json (lze vrátit přes Zpět)">&#129529; Odebrat chybějící (${missingIds.length})</button>
+        `;
+        container.appendChild(warnBanner);
+      }
+    }
     let maxTierSeenSoFar = 0;
-
     activeMods.forEach((modId, index) => {
+      const isMissingFromLib = !modDatabase[modId] && hasLoadedLibraryJson;
+      const prevName = knownModNames[modId];
       const info = modDatabase[modId] || {
         id: modId,
-        name: `Mód ID: ${modId}`,
-        author: "Propoj library.json pro název a ikonu",
+        name: prevName ? `Mód ID: ${modId} (dříve: ${prevName})` : `Mód ID: ${modId}`,
+        author: isMissingFromLib
+          ? "Chybí v library.json (odinstalovaný nebo nestažený mód)"
+          : "Propoj library.json pro název a ikonu",
         category: "Neznámé",
         tier: 6,
         tierLabel: TIER_LABELS[6],
@@ -2979,42 +3014,39 @@
         thumb: "",
         unknown: true
       };
-
       const currentTier = info.tier || 6;
       let isOutOfOrder = false;
-      if (currentTier < 99) {
+      if (!info.unknown && currentTier < 99) {
         if (currentTier < maxTierSeenSoFar) {
           isOutOfOrder = true;
         } else {
           maxTierSeenSoFar = currentTier;
         }
       }
-
       if (query && !info.name.toLowerCase().includes(query) && !modId.includes(query)) {
         return;
       }
-
-      const isShouldNotBeActive = info.isCosmetic || info.isMap;
+      const isShouldNotBeActive = info.isCosmetic || info.isMap || isMissingFromLib;
       const card = document.createElement('div');
       card.className = 'mod-card' + (isShouldNotBeActive ? ' warn-card' : (isOutOfOrder ? ' order-warn' : ''));
       card.draggable = true;
       card.dataset.index = index;
-
       card.addEventListener('dragstart', handleDragStart);
       card.addEventListener('dragover', handleDragOver);
       card.addEventListener('dragleave', handleDragLeave);
       card.addEventListener('drop', handleDrop);
       card.addEventListener('dragend', handleDragEnd);
-
       const thumbHtml = info.thumb
         ? `<img src="${info.thumb}" class="mod-thumb" alt="">`
-        : `<div class="mod-thumb" style="display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:#64748b;">#${index+1}</div>`;
-
-      const tierControlHtml = buildTierSelectHtml(modId, currentTier);
+        : (isMissingFromLib
+            ? `<div class="mod-thumb" style="display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#f87171;border-color:rgba(239,68,68,0.55);" title="Mód nebyl nalezen v library.json — pravděpodobně byl odinstalován ve hře nebo ještě není stažený.">⚠️</div>`
+            : `<div class="mod-thumb" style="display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:#64748b;">#${index+1}</div>`);
+      const tierControlHtml = isMissingFromLib
+        ? `<span class="tag bad" title="Tento mód je stále zapsaný v GameUserSettings.ini, ale chybí v library.json — pravděpodobně byl odinstalován ve hře (nebo není stažený). Bez záznamu v library.json nelze načíst název, ikonu ani kategorii.">⚠️ Odinstalovaný / chybí v library.json</span>`
+        : buildTierSelectHtml(modId, currentTier);
       const orderHintHtml = isOutOfOrder
         ? `<span class="tag order-hint" title="Tento mód je ze Skupiny ${currentTier}, ale nad ním už máš mód z nižší Skupiny ${maxTierSeenSoFar}.">↕ Doporučeno výš</span>`
         : ``;
-
       card.innerHTML = `
         <div class="order-num" title="Chytni a přetáhni myší">#${index + 1}</div>
         ${thumbHtml}
@@ -3861,7 +3893,7 @@
             requirements: reqs
           };
         }
-      } else if (/^ConfigAddSupplyCrateItems\s*=/i.test(line)) {
+      } else if (/^ConfigAddSupplyCrateItems\s*=/i.test(line) || (/^ConfigOverrideSupplyCrateItems\s*=/i.test(line) && /bAppendItemSets\s*=\s*True/i.test(line))) {
         parsedCrateLines.push(line);
       }
     }
@@ -3924,6 +3956,7 @@
       if (/^OverrideNamedEngramEntries\s*=/i.test(trimmed)) return false;
       if (/^ConfigOverrideItemCraftingCosts\s*=/i.test(trimmed)) return false;
       if (/^ConfigAddSupplyCrateItems\s*=/i.test(trimmed)) return false;
+      if (/^ConfigOverrideSupplyCrateItems\s*=/i.test(trimmed) && /bAppendItemSets\s*=\s*True/i.test(trimmed)) return false;
       return true;
     });
     const cleanedText = keptLines.join('\r\n');
@@ -4925,21 +4958,25 @@
     updateLootLiveSummaryText();
   }
   function buildLootPoolsIniLinesArray() {
-    const lines = [];
+    const setsByCrate = new Map();
     supplyCrateLootPools.forEach(pool => {
       if (pool.isDraft || !pool.crateClasses || pool.crateClasses.length === 0 || !pool.items || pool.items.length === 0) return;
       const setNameSafe = (pool.setName || "Custom_Pool").replace(/["(),]/g, '_');
-      const minE = Math.max(1, Number(pool.minEntries) || 1).toFixed(6);
-      const maxE = Math.max(1, Number(pool.maxEntries) || 1).toFixed(6);
+      const minENum = Math.max(1, Number(pool.minEntries) || 1);
+      const maxENum = Math.max(minENum, Number(pool.maxEntries) || 1);
+      const minE = minENum.toFixed(6);
+      const maxE = maxENum.toFixed(6);
       const setWeight = Math.max(0.01, (Number(pool.setWeightPct) || 100) / 100).toFixed(6);
       const noDupStr = pool.noDuplicates ? "True" : "False";
-      const minQ = Math.max(1, Number(pool.minQty) || 1).toFixed(6);
-      const maxQ = Math.max(1, Number(pool.maxQty) || 1).toFixed(6);
+      const minQNum = Math.max(1, Number(pool.minQty) || 1);
+      const maxQNum = Math.max(minQNum, Number(pool.maxQty) || 1);
+      const minQ = minQNum.toFixed(6);
+      const maxQ = maxQNum.toFixed(6);
       const minQual = Number(pool.minQual || 0).toFixed(6);
       const maxQual = Number(pool.maxQual || 0).toFixed(6);
       const useGuard = pool.bpOnlyIfCraftable !== false;
       const itemEntriesStr = pool.items.map((cls, idx) => {
-                const allowBp = !useGuard || canItemClassBeBlueprint(cls);
+        const allowBp = !useGuard || canItemClassBeBlueprint(cls);
         const effBpPct = allowBp ? (Number(pool.bpChancePct) || 0) : 0;
         const bpChance = Math.min(1, Math.max(0, effBpPct / 100)).toFixed(6);
         const forceBpStr = effBpPct >= 100 ? "True" : "False";
@@ -4950,11 +4987,39 @@
         const shortEntryName = cls.replace(/^PrimalItem(Structure|Resource|Consumable|Armor|Weapon)_|_C$/gi, '').slice(0, 28) || `Item_${idx+1}`;
         return `(EntryWeight=1.000000,ItemClassStrings=("${cls}"),ItemsWeights=(1.000000),MinQuantity=${minQ},MaxQuantity=${maxQ},MinQuality=${itemMinQual},MaxQuality=${itemMaxQual},bForceBlueprint=${forceBpStr},ChanceToBeBlueprintOverride=${bpChance},ItemEntryName="${shortEntryName}")`;
       }).join(',');
+      const itemSetStr = `(SetName="${setNameSafe}",MinNumItems=${minE},MaxNumItems=${maxE},NumItemsPower=1.000000,SetWeight=${setWeight},bItemsRandomWithoutReplacement=${noDupStr},ItemEntries=(${itemEntriesStr}))`;
       pool.crateClasses.forEach(crateCls => {
-        lines.push(`ConfigAddSupplyCrateItems=(SupplyCrateClassString="${crateCls}",ItemSets=((SetName="${setNameSafe}",MinNumItems=${minE},MaxNumItems=${maxE},NumItemsPower=1.000000,SetWeight=${setWeight},bItemsRandomWithoutReplacement=${noDupStr},ItemEntries=(${itemEntriesStr}))))`);
+        if (!setsByCrate.has(crateCls)) setsByCrate.set(crateCls, []);
+        setsByCrate.get(crateCls).push(itemSetStr);
       });
     });
+    const lines = [];
+    setsByCrate.forEach((setsArr, crateCls) => {
+      const setCount = setsArr.length;
+      lines.push(`ConfigOverrideSupplyCrateItems=(SupplyCrateClassString="${crateCls}",MinItemSets=${setCount},MaxItemSets=${setCount},NumItemSetsPower=1.000000,bSetsRandomWithoutReplacement=True,bAppendItemSets=True,ItemSets=(${setsArr.join(',')}))`);
+    });
     return lines;
+  }
+  function extractTopLevelParenBlocks(str) {
+    const blocks = [];
+    let depth = 0, start = -1, inQuote = false;
+    for (let i = 0; i < str.length; i++) {
+      const ch = str[i];
+      if (ch === '"' && str[i - 1] !== '\\') inQuote = !inQuote;
+      if (inQuote) continue;
+      if (ch === '(') {
+        if (depth === 0) start = i;
+        depth++;
+      } else if (ch === ')') {
+        if (depth === 0) break;
+        depth--;
+        if (depth === 0 && start !== -1) {
+          blocks.push(str.slice(start, i + 1));
+          start = -1;
+        }
+      }
+    }
+    return blocks;
   }
   function parseSupplyCrateIniLinesIntoPools(iniLines) {
     const groupedBySetName = {};
@@ -4962,44 +5027,66 @@
       const crateMatch = line.match(/SupplyCrateClassString\s*=\s*"([^"]+)"/i);
       if (!crateMatch) return;
       const crateCls = crateMatch[1].trim();
-      const setNameMatch = line.match(/SetName\s*=\s*"([^"]+)"/i);
-      const setName = setNameMatch ? setNameMatch[1].trim() : `Imported_Pool_${idx + 1}`;
-      const minEMatch = line.match(/MinNumItems\s*=\s*([0-9.]+)/i);
-      const maxEMatch = line.match(/MaxNumItems\s*=\s*([0-9.]+)/i);
-      const weightMatch = line.match(/SetWeight\s*=\s*([0-9.]+)/i);
-      const noDupMatch = line.match(/bItemsRandomWithoutReplacement\s*=\s*(True|False)/i);
-      const minQMatch = line.match(/MinQuantity\s*=\s*([0-9.]+)/i);
-      const maxQMatch = line.match(/MaxQuantity\s*=\s*([0-9.]+)/i);
-      const minQualMatch = line.match(/MinQuality\s*=\s*([0-9.]+)/i);
-      const maxQualMatch = line.match(/MaxQuality\s*=\s*([0-9.]+)/i);
-      const bpChanceMatch = line.match(/ChanceToBeBlueprintOverride\s*=\s*([0-9.]+)/i);
-      const items = [];
-      const clsRegex = /ItemClassStrings\s*=\s*\(\s*"([^"]+)"\s*\)/gi;
-      let m;
-      while ((m = clsRegex.exec(line)) !== null) {
-        if (!items.includes(m[1].trim())) items.push(m[1].trim());
+      let setBlocks = [];
+      const itemSetsIdx = line.search(/ItemSets\s*=\s*\(/i);
+      if (itemSetsIdx !== -1) {
+        const openIdx = line.indexOf('(', itemSetsIdx);
+        const outerArr = extractTopLevelParenBlocks(line.slice(openIdx));
+        if (outerArr.length > 0) {
+          const innerSets = outerArr[0].slice(1, -1);
+          setBlocks = extractTopLevelParenBlocks(innerSets);
+        }
       }
-      if (items.length === 0) return;
-      const groupKey = `${setName}::${items.join(',')}`;
-      if (!groupedBySetName[groupKey]) {
-        groupedBySetName[groupKey] = {
-          id: 'pool_' + Date.now() + '_' + idx,
-          setName,
-          crateClasses: [crateCls],
-          minEntries: minEMatch ? Math.round(parseFloat(minEMatch[1])) : 1,
-          maxEntries: maxEMatch ? Math.round(parseFloat(maxEMatch[1])) : 1,
-          setWeightPct: weightMatch ? Math.round(parseFloat(weightMatch[1]) * 100) : 100,
-          noDuplicates: noDupMatch ? noDupMatch[1].toLowerCase() === 'true' : true,
-          minQty: minQMatch ? Math.round(parseFloat(minQMatch[1])) : 1,
-          maxQty: maxQMatch ? Math.round(parseFloat(maxQMatch[1])) : 1,
-          bpChancePct: bpChanceMatch ? Math.round(parseFloat(bpChanceMatch[1]) * 100) : 0,
-          minQual: minQualMatch ? parseFloat(minQualMatch[1]) : 0,
-          maxQual: maxQualMatch ? parseFloat(maxQualMatch[1]) : 0,
-          items
-        };
-      } else if (!groupedBySetName[groupKey].crateClasses.includes(crateCls)) {
-        groupedBySetName[groupKey].crateClasses.push(crateCls);
-      }
+      if (setBlocks.length === 0) setBlocks = [line];
+      setBlocks.forEach((setBlock, sIdx) => {
+        const setNameMatch = setBlock.match(/SetName\s*=\s*"([^"]+)"/i);
+        const setName = setNameMatch ? setNameMatch[1].trim() : `Imported_Pool_${idx + 1}_${sIdx + 1}`;
+        const minEMatch = setBlock.match(/MinNumItems\s*=\s*([0-9.]+)/i);
+        const maxEMatch = setBlock.match(/MaxNumItems\s*=\s*([0-9.]+)/i);
+        const weightMatch = setBlock.match(/SetWeight\s*=\s*([0-9.]+)/i);
+        const noDupMatch = setBlock.match(/bItemsRandomWithoutReplacement\s*=\s*(True|False)/i);
+        const minQMatch = setBlock.match(/MinQuantity\s*=\s*([0-9.]+)/i);
+        const maxQMatch = setBlock.match(/MaxQuantity\s*=\s*([0-9.]+)/i);
+        let maxBpChance = 0;
+        const bpRegex = /ChanceToBeBlueprintOverride\s*=\s*([0-9.]+)/gi;
+        let bm;
+        while ((bm = bpRegex.exec(setBlock)) !== null) {
+          maxBpChance = Math.max(maxBpChance, parseFloat(bm[1]) || 0);
+        }
+        let maxMinQual = 0, maxMaxQual = 0;
+        const minQualRegex = /MinQuality\s*=\s*([0-9.]+)/gi;
+        const maxQualRegex = /MaxQuality\s*=\s*([0-9.]+)/gi;
+        let qm;
+        while ((qm = minQualRegex.exec(setBlock)) !== null) maxMinQual = Math.max(maxMinQual, parseFloat(qm[1]) || 0);
+        while ((qm = maxQualRegex.exec(setBlock)) !== null) maxMaxQual = Math.max(maxMaxQual, parseFloat(qm[1]) || 0);
+        const items = [];
+        const clsRegex = /ItemClassStrings\s*=\s*\(\s*"([^"]+)"\s*\)/gi;
+        let m;
+        while ((m = clsRegex.exec(setBlock)) !== null) {
+          if (!items.includes(m[1].trim())) items.push(m[1].trim());
+        }
+        if (items.length === 0) return;
+        const groupKey = `${setName}::${items.join(',')}`;
+        if (!groupedBySetName[groupKey]) {
+          groupedBySetName[groupKey] = {
+            id: 'pool_' + Date.now() + '_' + idx + '_' + sIdx,
+            setName,
+            crateClasses: [crateCls],
+            minEntries: minEMatch ? Math.round(parseFloat(minEMatch[1])) : 1,
+            maxEntries: maxEMatch ? Math.round(parseFloat(maxEMatch[1])) : 1,
+            setWeightPct: weightMatch ? Math.round(parseFloat(weightMatch[1]) * 100) : 100,
+            noDuplicates: noDupMatch ? noDupMatch[1].toLowerCase() === 'true' : true,
+            minQty: minQMatch ? Math.round(parseFloat(minQMatch[1])) : 1,
+            maxQty: maxQMatch ? Math.round(parseFloat(maxQMatch[1])) : 1,
+            bpChancePct: Math.round(maxBpChance * 100),
+            minQual: maxMinQual,
+            maxQual: maxMaxQual,
+            items
+          };
+        } else if (!groupedBySetName[groupKey].crateClasses.includes(crateCls)) {
+          groupedBySetName[groupKey].crateClasses.push(crateCls);
+        }
+      });
     });
     const existingDrafts = supplyCrateLootPools.filter(p => p && p.isDraft);
     supplyCrateLootPools = [...Object.values(groupedBySetName), ...existingDrafts];
@@ -5035,7 +5122,7 @@
     if (previewEl) {
       previewEl.value = lootLines.length > 0
         ? lootLines.join('\n')
-        : "; Zatím nemáš žádné aktivní Loot Balíčky (ConfigAddSupplyCrateItems).";
+        : "; Zatím nemáš žádné aktivní Loot Balíčky (ConfigOverrideSupplyCrateItems).";
     }
     if (countEl) countEl.textContent = supplyCrateLootPools.length;
     const query = (document.getElementById('lootPoolsSearch')?.value || '').toLowerCase().trim();
@@ -5859,7 +5946,7 @@
   function copyLootIniLinesOnly() {
     const val = document.getElementById('outputLootIniPreview').value;
     navigator.clipboard.writeText(val).then(() => {
-      showToast("📋 Řádky ConfigAddSupplyCrateItems zkopírovány!");
+      showToast("📋 Řádky ConfigOverrideSupplyCrateItems zkopírovány!");
     });
   }
 
@@ -5938,7 +6025,18 @@
       }
       const cachedDb = localStorage.getItem('asa_mod_db_cache_v10');
       if (cachedDb) {
-        modDatabase = { ...PRELOADED_DB, ...JSON.parse(cachedDb) };
+        const parsedCachedDb = JSON.parse(cachedDb);
+        modDatabase = { ...PRELOADED_DB, ...parsedCachedDb };
+        try {
+          const savedKnown = localStorage.getItem('asa_known_mod_names_v10');
+          if (savedKnown) knownModNames = JSON.parse(savedKnown);
+        } catch(e) {}
+        if (Object.keys(parsedCachedDb).some(id => id !== 'VANILLA_ARK' && !PRELOADED_DB[id])) {
+          hasLoadedLibraryJson = true;
+        }
+        Object.values(parsedCachedDb).forEach(m => {
+          if (m && m.id && m.name && m.id !== 'VANILLA_ARK') knownModNames[m.id] = m.name;
+        });
       }
       Object.keys(userTierOverrides).forEach(modId => {
         if (modDatabase[modId]) {
@@ -6255,14 +6353,11 @@
     const keptLines = [];
     for (let i = 0; i < existingLines.length; i++) {
       const line = existingLines[i];
-      if (i < 2) {
-        keptLines.push(line);
-        continue;
-      }
       const trimmed = line.trim();
       if (/^OverrideNamedEngramEntries\s*=/i.test(trimmed)) continue;
       if (/^ConfigOverrideItemCraftingCosts\s*=/i.test(trimmed)) continue;
       if (/^ConfigAddSupplyCrateItems\s*=/i.test(trimmed)) continue;
+      if (/^ConfigOverrideSupplyCrateItems\s*=/i.test(trimmed) && /bAppendItemSets\s*=\s*True/i.test(trimmed)) continue;
       keptLines.push(line);
     }
     if (generatedLines.length === 0) {
@@ -7909,6 +8004,8 @@
 </script>
 </body>
 </html>
+
+
 
 
 

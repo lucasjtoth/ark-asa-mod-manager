@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARK: Survival Ascended – Singleplayer Mod & Game.ini Manager (v10.14)</title>
+<title>ARK: Survival Ascended – Singleplayer Mod & Game.ini Manager (v10.16)</title>
 <style>
   :root {
     --bg-main: #0f141c;
@@ -812,7 +812,7 @@
 
 <header>
   <div class="title-wrap">
-    <h1>🦖 ARK: Survival Ascended — Singleplayer Mod & Game.ini Manager (v10.14)</h1>
+    <h1>🦖 ARK: Survival Ascended — Singleplayer Mod & Game.ini Manager (v10.16)</h1>
     <p>Complete Load Order Management in <code>GameUserSettings.ini</code> + Engrams, Crafting Costs & UE5 Spawn Commands in <code>Game.ini</code></p>
   </div>
   <div class="btn-row">
@@ -1109,7 +1109,7 @@
 </div>
 
 <!-- ========================================================================== -->
-<!-- ZÁLOŽKA 3: POKLADY, MYSTERY CRATES & LOOT POOLY (ConfigAddSupplyCrateItems)-->
+<!-- TAB 3: SUPPLY CRATES, TREASURES & LOOT POOLS (ConfigOverrideSupplyCrateItems + bAppendItemSets=True)-->
 <!-- ========================================================================== -->
 <div id="tabSectionLoot" class="tab-section">
   <div class="path-box" id="mysteryCratesStatusBanner" style="margin-bottom: 14px; border-left: 4px solid var(--accent);">
@@ -1128,11 +1128,11 @@
           <div class="btn-row">
             
             <button class="btn-success" onclick="saveGameIniFile()" title="Writes engrams, crafting recipes, and these Loot Pools directly to Game.ini">💾 Save to Game.ini</button>
-            <button class="btn-danger" onclick="clearAllLootPools()" title="Removes all added ConfigAddSupplyCrateItems loot pools">Clear All</button>
+            <button class="btn-danger" onclick="clearAllLootPools()" title="Removes all added Loot Pools (ConfigOverrideSupplyCrateItems)">Clear All</button>
           </div>
         </div>
         <p style="font-size:0.78rem; color:var(--text-muted);">
-          Uses the <code>ConfigAddSupplyCrateItems</code> directive — safely appends new item sets to selected supply crates and dino drops without overwriting their default vanilla loot.
+          Uses the <code>ConfigOverrideSupplyCrateItems</code> directive with <code>bAppendItemSets=True</code> — safely appends new item sets to selected supply crates and dino drops (merging multiple pools for the same crate into a single line) without overwriting their default vanilla loot.
         </p>
         <div class="search-row">
           <input type="text" id="lootPoolsSearch" placeholder="Search saved loot pools, crates, or items..." oninput="renderLootPoolsTab()" style="flex:1;">
@@ -1204,7 +1204,7 @@
   </div>
   <div class="output-bar">
     <div class="panel-title-row">
-      <strong>Preview of generated <code>ConfigAddSupplyCrateItems</code> lines for <code>Game.ini</code>:</strong>
+      <strong>Preview of generated <code>ConfigOverrideSupplyCrateItems</code> lines (<code>bAppendItemSets=True</code>) for <code>Game.ini</code>:</strong>
       <div class="btn-row">
         <button onclick="copyLootIniLinesOnly()">📋 Copy Loot Lines Only</button>
         <button class="btn-success" onclick="saveGameIniFile()">💾 Save All to Game.ini</button>
@@ -1217,7 +1217,7 @@
 <div class="modal-backdrop" id="lootPoolModal" onmousedown="this._bgDown=(event.target===this)" onclick="if(event.target===this && this._bgDown) closeLootPoolModal()">
   <div class="modal-content" style="max-width: 880px;">
     <div class="modal-header">
-      <h2 id="lootModalTitle">🎁 Configure Loot Pool (ConfigAddSupplyCrateItems)</h2>
+      <h2 id="lootModalTitle">🎁 Configure Loot Pool (ConfigOverrideSupplyCrateItems)</h2>
       <button class="btn-danger" onclick="closeLootPoolModal()">✖ Close</button>
     </div>
     <div class="modal-body">
@@ -1415,7 +1415,7 @@
       </div>
 
       <div class="tier-box t2">
-        <h3><span>2. Official Events</span> <span class="tag tier-2">Hned pod Overhaulem (nebo #1 bez Overhaulu)</span></h3>
+        <h3><span>2. Official Events</span> <span class="tag tier-2">Right Below Overhaul (or #1 Without Overhaul)</span></h3>
         <p>Official Studio Wildcard seasonal events (e.g., Fear Ascended, Winter Wonderland) that apply a global World Buff — adding event spawns, color regions, and holiday craftables to the base game or overhaul.</p>
         <div class="tier-examples" id="guideExamplesTier2"></div>
       </div>
@@ -1433,7 +1433,7 @@
       </div>
 
       <div class="tier-box t5">
-        <h3><span>5. Structures, Storage & Logistics</span> <span class="tag tier-5">Střed seznamu</span></h3>
+        <h3><span>5. Structures, Storage & Logistics</span> <span class="tag tier-5">Middle of Load Order</span></h3>
         <p>Building sets, base automation, dedicated/visual storage, and creature capture balls (e.g., Dino Depot, Cybers Structures). Placed after creatures so they properly recognize modded dinos and traits.</p>
         <div class="tier-examples" id="guideExamplesTier5"></div>
       </div>
@@ -1472,7 +1472,7 @@
     </div>
     <div class="modal-body" style="gap: 10px;">
       <p style="color:var(--text-muted); font-size:0.82rem;">
-        Tady vidíš celý surový obsah svého souboru <code>GameUserSettings.ini</code>. Můžeš v něm cokoliv zkontrolovat nebo ručně upravit a kliknout na <b>„💾 Apply & Save Changes“</b>.
+        Here you can inspect or manually edit the raw content of your <code>GameUserSettings.ini</code> file, then click <b>"💾 Apply & Save Changes"</b>.
       </p>
       <textarea id="gusEditorTextarea" spellcheck="false" style="width:100%; height:58vh; background:#090d12; color:#e2e8f0; border:1px solid var(--border); border-radius:8px; padding:12px; font-family:Consolas, monospace; font-size:0.81rem; line-height:1.45; resize:vertical;"></textarea>
     </div>
@@ -1720,7 +1720,7 @@
         <h3><span>💡 4. Additional Practical Warnings</span> <span class="tag tier-7">Tips</span></h3>
         <div class="tier-examples" style="margin-top:8px; line-height:1.55;">
           • <b>Removing Mods from an Active Save:</b> If you remove a mod from <code>ActiveMods=</code> while having placed structures, stored items, or tamed creatures from that mod in your world, they will permanently vanish when loading the save.<br>
-          • <b>Testing Supply Crate & Dino Drop Changes:</b> <code>ConfigAddSupplyCrateItems</code> changes only apply to <b>newly spawned</b> supply crates and creatures (not those already existing in the world prior to the edit — use <code>cheat DestroyWildDinos</code> in-game to refresh wild creatures).<br>
+          • <b>Testing Supply Crate & Dino Drop Changes:</b> <code>ConfigOverrideSupplyCrateItems</code> changes only apply to <b>newly spawned</b> supply crates and creatures (not those already existing in the world prior to the edit — use <code>cheat DestroyWildDinos</code> in-game to refresh wild creatures).<br>
           • <b>Browser Storage:</b> Draft pools and GUS profiles are stored in your browser's <code>localStorage</code>. Clearing browser site data (e.g., via CCleaner) will erase saved browser profiles.
         </div>
       </div>
@@ -1999,8 +1999,8 @@
     { group: "⚙️ 8. DLC Structures & Gear (Bob's Tall Tales / Lost Colony)", cls: "PrimalItem_WeaponGeneScanner_C", label: "Gene Scanner (Bob's Tall Tales)", dlc: "BOB_ONLY" },
     { group: "⚙️ 8. DLC Structures & Gear (Bob's Tall Tales / Lost Colony)", cls: "PrimalItemStructure_GeneStorage_C", label: "Gene Storage (Bob's Tall Tales)", dlc: "BOB_ONLY" },
     { group: "⚙️ 8. DLC Structures & Gear (Bob's Tall Tales / Lost Colony)", cls: "PrimalItemStructure_EmbryoIncubator_C", label: "Embryo Incubator (Bob's Tall Tales)", dlc: "BOB_ONLY" },
-    { group: "⚙️ 8. DLC Structures & Gear (Bob's Tall Tales / Lost Colony)", cls: "PrimalItemStructure_SteampunkForge_C", label: "Steampunk Mega Forge (Bob's Tall Tales)", dlc: "BOB_ONLY" },
-    { group: "⚙️ 8. DLC Structures & Gear (Bob's Tall Tales / Lost Colony)", cls: "PrimalItemStructure_Clockface_C", label: "zepp / Clockwork Structure (Bob's Tall Tales)", dlc: "BOB_ONLY" },
+    { group: "⚙️ 8. DLC Structures & Gear (Bob's Tall Tales / Lost Colony)", cls: "PrimalItemStructure_SteampunkForge_C", label: "Steam Forge (Bob's Tall Tales)", dlc: "BOB_ONLY" },
+    { group: "⚙️ 8. DLC Structures & Gear (Bob's Tall Tales / Lost Colony)", cls: "PrimalItemStructure_Clockface_C", label: "Clockface (Bob's Tall Tales)", dlc: "BOB_ONLY" },
     { group: "⚙️ 8. DLC Structures & Gear (Bob's Tall Tales / Lost Colony)", cls: "PrimalItemStructure_BioGrinder_C", label: "Bio-Grinder (Bob's Tall Tales)", dlc: "BOB_ONLY" },
     { group: "⚙️ 8. DLC Structures & Gear (Bob's Tall Tales / Lost Colony)", cls: "PrimalItemStructure_Tribune_C", label: "BattleRig Garage (Bob's Tall Tales)", dlc: "BOB_ONLY" },
     { group: "⚙️ 8. DLC Structures & Gear (Bob's Tall Tales / Lost Colony)", cls: "PrimalItemStructure_CryoStation_C", label: "Cryolator (Lost Colony)", dlc: "LOSTCOLONY" },
@@ -2018,6 +2018,8 @@
   let lastLibMtime = 0;
   let hasUnsavedUiChanges = false;
   let dragSrcIndex = null;
+  let hasLoadedLibraryJson = false;
+  let knownModNames = {};
 
   // Stav pro Záložku 2 (Game.ini + Složka 83374)
   let gameIniRawContent = "";
@@ -2842,6 +2844,11 @@
       });
 
       modDatabase = updatedDb;
+      hasLoadedLibraryJson = true;
+      Object.values(updatedDb).forEach(m => {
+        if (m && m.id && m.name && m.id !== 'VANILLA_ARK') knownModNames[m.id] = m.name;
+      });
+      try { localStorage.setItem('asa_known_mod_names_v10', JSON.stringify(knownModNames)); } catch(e) {}
 
       const status = document.getElementById('libStatus');
       status.textContent = isDirect
@@ -2905,7 +2912,7 @@
     showToast("✨ Active mods sorted by recommended tiers (1 → 7)!");
   }
 
-  function addModSmartByTier(modId) { pushHistorySnapshot("Pridani modu do GUS");
+  function addModSmartByTier(modId) { pushHistorySnapshot("Add mod to GUS");
     modId = String(modId).trim();
     if (!modId) return;
     const existingIdx = activeMods.indexOf(modId);
@@ -2949,27 +2956,55 @@
     }
   }
 
+  function removeMissingLibraryMods() {
+    if (!hasLoadedLibraryJson) return;
+    const missing = activeMods.filter(id => !modDatabase[id]);
+    if (missing.length === 0) return;
+    if (!confirm(`Are you sure you want to remove ${missing.length} mod(s) missing from library.json from ActiveMods?\n\nIDs: ${missing.join(', ')}\n\n(You can undo this anytime with Undo or Ctrl+Z.)`)) return;
+    pushHistorySnapshot("Remove uninstalled mods");
+    activeMods = activeMods.filter(id => !!modDatabase[id]);
+    hasUnsavedUiChanges = true;
+    syncEventDropdownWithActive();
+    renderAll();
+    showToast(`\uD83E\uDDF9 Removed ${missing.length} uninstalled/missing mod(s) from ActiveMods!`);
+  }
   function renderActiveMods() {
     const container = document.getElementById('activeModList');
     const query = document.getElementById('activeSearch').value.toLowerCase().trim();
     document.getElementById('activeCount').textContent = activeMods.length;
     container.innerHTML = '';
-
     if (activeMods.length === 0) {
       container.innerHTML = `<div style="padding:28px;text-align:center;color:var(--text-muted);">
         No active mods loaded yet.<br><br>
-        Click <b>"🔗 Link GUS.ini"</b> above, or add gameplay mods from the catalog on the right.
+        Click <b>"&#128279; Link GUS.ini"</b> above, or add gameplay mods from the catalog on the right.
       </div>`;
       return;
     }
-
+    if (hasLoadedLibraryJson) {
+      const missingIds = activeMods.filter(id => !modDatabase[id]);
+      if (missingIds.length > 0) {
+        const warnBanner = document.createElement('div');
+        warnBanner.style = "background:rgba(153,27,27,0.22); border:1px solid rgba(239,68,68,0.65); border-radius:8px; padding:9px 12px; font-size:0.78rem; color:#fecaca; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;";
+        warnBanner.innerHTML = `
+          <div style="flex:1; min-width:220px;">
+            <b>&#9888;&#65039; ${missingIds.length} mod(s) in <code>ActiveMods=</code> are missing from <code>library.json</code></b><br>
+            <span style="color:#cbd5e1;">If a mod was uninstalled in-game, ARK wipes its name, thumbnail, and description from <code>library.json</code>, so the app cannot display its details or detect its tier (or the mod is not downloaded yet).</span>
+          </div>
+          <button class="btn-danger icon-btn" onclick="removeMissingLibraryMods()" title="Removes all mods missing from library.json from ActiveMods (can be undone with Undo)">&#129529; Remove Missing (${missingIds.length})</button>
+        `;
+        container.appendChild(warnBanner);
+      }
+    }
     let maxTierSeenSoFar = 0;
-
     activeMods.forEach((modId, index) => {
+      const isMissingFromLib = !modDatabase[modId] && hasLoadedLibraryJson;
+      const prevName = knownModNames[modId];
       const info = modDatabase[modId] || {
         id: modId,
-        name: `Mod ID: ${modId}`,
-        author: "Link library.json to load mod name & icon",
+        name: prevName ? `Mod ID: ${modId} (previously: ${prevName})` : `Mod ID: ${modId}`,
+        author: isMissingFromLib
+          ? "Missing from library.json (uninstalled or not downloaded)"
+          : "Link library.json to load mod name & icon",
         category: "Unknown",
         tier: 6,
         tierLabel: TIER_LABELS[6],
@@ -2979,42 +3014,39 @@
         thumb: "",
         unknown: true
       };
-
       const currentTier = info.tier || 6;
       let isOutOfOrder = false;
-      if (currentTier < 99) {
+      if (!info.unknown && currentTier < 99) {
         if (currentTier < maxTierSeenSoFar) {
           isOutOfOrder = true;
         } else {
           maxTierSeenSoFar = currentTier;
         }
       }
-
       if (query && !info.name.toLowerCase().includes(query) && !modId.includes(query)) {
         return;
       }
-
-      const isShouldNotBeActive = info.isCosmetic || info.isMap;
+      const isShouldNotBeActive = info.isCosmetic || info.isMap || isMissingFromLib;
       const card = document.createElement('div');
       card.className = 'mod-card' + (isShouldNotBeActive ? ' warn-card' : (isOutOfOrder ? ' order-warn' : ''));
       card.draggable = true;
       card.dataset.index = index;
-
       card.addEventListener('dragstart', handleDragStart);
       card.addEventListener('dragover', handleDragOver);
       card.addEventListener('dragleave', handleDragLeave);
       card.addEventListener('drop', handleDrop);
       card.addEventListener('dragend', handleDragEnd);
-
       const thumbHtml = info.thumb
         ? `<img src="${info.thumb}" class="mod-thumb" alt="">`
-        : `<div class="mod-thumb" style="display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:#64748b;">#${index+1}</div>`;
-
-      const tierControlHtml = buildTierSelectHtml(modId, currentTier);
+        : (isMissingFromLib
+            ? `<div class="mod-thumb" style="display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#f87171;border-color:rgba(239,68,68,0.55);" title="Mod not found in library.json — it was likely uninstalled in-game or is not downloaded yet.">&#9888;&#65039;</div>`
+            : `<div class="mod-thumb" style="display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:#64748b;">#${index+1}</div>`);
+      const tierControlHtml = isMissingFromLib
+        ? `<span class="tag bad" title="This mod is still listed in GameUserSettings.ini, but missing from library.json — it was likely uninstalled in-game (or not downloaded). Without a library.json entry, the app cannot read its name, thumbnail, or tier.">&#9888;&#65039; Uninstalled / missing from library.json</span>`
+        : buildTierSelectHtml(modId, currentTier);
       const orderHintHtml = isOutOfOrder
-        ? `<span class="tag order-hint" title="This mod belongs to Tier ${currentTier}, but is placed below a mod from Tier ${maxTierSeenSoFar}.">↕ Move Higher</span>`
+        ? `<span class="tag order-hint" title="This mod belongs to Tier ${currentTier}, but is placed below a mod from Tier ${maxTierSeenSoFar}.">&#8597; Move Higher</span>`
         : ``;
-
       card.innerHTML = `
         <div class="order-num" title="Drag and drop to reorder">#${index + 1}</div>
         ${thumbHtml}
@@ -3022,17 +3054,17 @@
           <div class="mod-name"><span class="mod-title-scroll-wrap"><span class="mod-title-scroll-inner ${info.name.length > 32 ? 'is-long' : ''}">${info.name}</span></span></div>
           <div class="mod-meta">
             <span>ID: <b>${modId}</b></span>
-            <span>• ${info.author}</span>
+            <span>&bull; ${info.author}</span>
             ${tierControlHtml}
             ${orderHintHtml}
           </div>
         </div>
         <div class="mod-actions">
-          <button class="icon-btn btn-primary" onclick="moveMod(${index}, 0)" title="Move to #1 position" ${index === 0 ? 'disabled' : ''}>⏫ #1</button>
-          <button class="icon-btn" onclick="moveMod(${index}, ${index - 1})" title="Move up one position" ${index === 0 ? 'disabled' : ''}>▲</button>
-          <button class="icon-btn" onclick="moveMod(${index}, ${index + 1})" title="Move down one position" ${index === activeMods.length - 1 ? 'disabled' : ''}>▼</button>
-          <button class="icon-btn" onclick="moveMod(${index}, ${activeMods.length - 1})" title="Move to bottom" ${index === activeMods.length - 1 ? 'disabled' : ''}>⏬</button>
-          <button class="icon-btn btn-danger" onclick="removeActiveMod(${index})" title="Remove from ActiveMods in GUS.ini">✖</button>
+          <button class="icon-btn btn-primary" onclick="moveMod(${index}, 0)" title="Move to #1 position" ${index === 0 ? 'disabled' : ''}>&#9195; #1</button>
+          <button class="icon-btn" onclick="moveMod(${index}, ${index - 1})" title="Move up one position" ${index === 0 ? 'disabled' : ''}>&#9650;</button>
+          <button class="icon-btn" onclick="moveMod(${index}, ${index + 1})" title="Move down one position" ${index === activeMods.length - 1 ? 'disabled' : ''}>&#9660;</button>
+          <button class="icon-btn" onclick="moveMod(${index}, ${activeMods.length - 1})" title="Move to bottom" ${index === activeMods.length - 1 ? 'disabled' : ''}>&#9196;</button>
+          <button class="icon-btn btn-danger" onclick="removeActiveMod(${index})" title="Remove from ActiveMods in GUS.ini">&#10006;</button>
         </div>
       `;
       container.appendChild(card);
@@ -3114,7 +3146,7 @@
     });
   }
 
-  function moveMod(fromIndex, toIndex) { pushHistorySnapshot("Zmena poradi modu");
+  function moveMod(fromIndex, toIndex) { pushHistorySnapshot("Reorder mod");
     if (toIndex < 0 || toIndex >= activeMods.length) return;
     const [moved] = activeMods.splice(fromIndex, 1);
     activeMods.splice(toIndex, 0, moved);
@@ -3123,7 +3155,7 @@
     renderAll();
   }
 
-  function removeActiveMod(index) { if (!confirm("Are you sure you want to remove this mod from ActiveMods?")) return; pushHistorySnapshot("Odebrani aktivniho modu");
+  function removeActiveMod(index) { if (!confirm("Are you sure you want to remove this mod from ActiveMods?")) return; pushHistorySnapshot("Remove active mod");
     activeMods.splice(index, 1);
     hasUnsavedUiChanges = true;
     syncEventDropdownWithActive();
@@ -3593,7 +3625,7 @@
       const nameB = modDatabase[b]?.name || b;
       return nameA.localeCompare(nameB);
     });
-    sel.innerHTML = `<option value="ALL">-- Všechny naskenované mody (${modIds.length}) --</option>`;
+    sel.innerHTML = `<option value="ALL">-- All Scanned Mods (${modIds.length}) --</option>`;
     modIds.forEach(modId => {
       const modName = modDatabase[modId]?.name || `Mod #${modId}`;
       const prefix = isModActiveOrOwnedMap(modId) ? "" : "❌ [INACTIVE] ";
@@ -3861,7 +3893,7 @@
             requirements: reqs
           };
         }
-      } else if (/^ConfigAddSupplyCrateItems\s*=/i.test(line)) {
+      } else if (/^ConfigAddSupplyCrateItems\s*=/i.test(line) || (/^ConfigOverrideSupplyCrateItems\s*=/i.test(line) && /bAppendItemSets\s*=\s*True/i.test(line))) {
         parsedCrateLines.push(line);
       }
     }
@@ -3924,6 +3956,7 @@
       if (/^OverrideNamedEngramEntries\s*=/i.test(trimmed)) return false;
       if (/^ConfigOverrideItemCraftingCosts\s*=/i.test(trimmed)) return false;
       if (/^ConfigAddSupplyCrateItems\s*=/i.test(trimmed)) return false;
+      if (/^ConfigOverrideSupplyCrateItems\s*=/i.test(trimmed) && /bAppendItemSets\s*=\s*True/i.test(trimmed)) return false;
       return true;
     });
     const cleanedText = keptLines.join('\r\n');
@@ -4073,7 +4106,7 @@
     if (previewEl) {
       previewEl.value = previewLines.length > 0
         ? `[/Script/ShooterGame.ShooterGameMode]\n${previewLines.join('\n')}`
-        : "; No active OverrideNamedEngramEntries, ConfigOverrideItemCraftingCosts, or ConfigAddSupplyCrateItems rules yet.";
+        : "; No active OverrideNamedEngramEntries, ConfigOverrideItemCraftingCosts, or ConfigOverrideSupplyCrateItems rules yet.";
     }
     const catalogByEngram = new Map();
     const catalogByItem = new Map();
@@ -4330,7 +4363,7 @@
   // ============================================================================
   // 7. AKCE PRO ENGRAMY, CRAFTING RECEPTY A SPAWN PŘÍKAZY
   // ============================================================================
-  function quickToggleHideEngram(itemKey) { pushHistorySnapshot("Skryti/Zobrazeni engramu");
+  function quickToggleHideEngram(itemKey) { pushHistorySnapshot("Toggle hidden engram");
     const item = manifestCatalog.find(x => x.key === itemKey);
     if (!item) return;
     const engCls = resolveEffectiveEngramClass(item);
@@ -4372,7 +4405,7 @@
     const item = manifestCatalog.find(x => x.key === itemKey);
     if (!item || !item.itemClass) return;
 
-    pushHistorySnapshot("Rychly recept 1x Thatch"); craftingOverrides[item.itemClass] = {
+    pushHistorySnapshot("Quick 1x Thatch recipe"); craftingOverrides[item.itemClass] = {
       itemClassString: item.itemClass,
       requirements: [
         { resourceClass, amount: 1.0, exact: false }
@@ -4400,7 +4433,7 @@
 
   function removeEngramOverride(engramClassName) {
     if (!confirm(`Are you sure you want to remove the override for "${engramClassName}"?`)) return;
-    pushHistorySnapshot(`Odebrání engramu ${engramClassName}`);
+    pushHistorySnapshot(`Remove engram ${engramClassName}`);
     delete engramOverrides[engramClassName];
     hasUnsavedGameIniChanges = true;
         try {
@@ -4423,7 +4456,7 @@
 
   function removeCraftingOverride(itemClassString) {
     if (!confirm(`Are you sure you want to delete the custom recipe for "${itemClassString}"?`)) return;
-    pushHistorySnapshot(`Smazání receptu ${itemClassString}`);
+    pushHistorySnapshot(`Delete recipe ${itemClassString}`);
     delete craftingOverrides[itemClassString];
     hasUnsavedGameIniChanges = true;
         try {
@@ -4668,7 +4701,7 @@
     renderModalIngredientsList();
   }
 
-  function saveModalRecipeAndEngram() { pushHistorySnapshot("Uprava receptu/engramu");
+  function saveModalRecipeAndEngram() { pushHistorySnapshot("Edit recipe/engram");
     const itemCls = document.getElementById('modalItemClassInput').value.trim();
     const engCls = document.getElementById('modalEngramClassInput').value.trim();
     const engEnabled = document.getElementById('modalEngramEnabled').checked;
@@ -4752,7 +4785,7 @@
       showToast("Select items in the catalog on the right first!");
       return;
     }
-    pushHistorySnapshot("Hromadna uprava v katalogu"); let affected = 0;
+    pushHistorySnapshot("Bulk edit in catalog"); let affected = 0;
     selectedManifestKeys.forEach(key => {
       const item = manifestCatalog.find(x => x.key === key);
       if (!item || item.type === 'DINO') return;
@@ -4765,7 +4798,7 @@
         engramOverrides[engCls] = { engramClassName: engCls, hidden: false, cost: 0, level: 1, removePreReq: true };
         affected++;
       } else if (actionType === 'CHEAP_THATCH' && item.itemClass) {
-        pushHistorySnapshot("Rychly recept 1x Thatch"); craftingOverrides[item.itemClass] = {
+        pushHistorySnapshot("Quick 1x Thatch recipe"); craftingOverrides[item.itemClass] = {
           itemClassString: item.itemClass,
           requirements: [{ resourceClass: 'PrimalItemResource_Thatch_C', amount: 1.0, exact: false }]
         };
@@ -4925,21 +4958,25 @@
     updateLootLiveSummaryText();
   }
   function buildLootPoolsIniLinesArray() {
-    const lines = [];
+    const setsByCrate = new Map();
     supplyCrateLootPools.forEach(pool => {
       if (pool.isDraft || !pool.crateClasses || pool.crateClasses.length === 0 || !pool.items || pool.items.length === 0) return;
       const setNameSafe = (pool.setName || "Custom_Pool").replace(/["(),]/g, '_');
-      const minE = Math.max(1, Number(pool.minEntries) || 1).toFixed(6);
-      const maxE = Math.max(1, Number(pool.maxEntries) || 1).toFixed(6);
+      const minENum = Math.max(1, Number(pool.minEntries) || 1);
+      const maxENum = Math.max(minENum, Number(pool.maxEntries) || 1);
+      const minE = minENum.toFixed(6);
+      const maxE = maxENum.toFixed(6);
       const setWeight = Math.max(0.01, (Number(pool.setWeightPct) || 100) / 100).toFixed(6);
       const noDupStr = pool.noDuplicates ? "True" : "False";
-      const minQ = Math.max(1, Number(pool.minQty) || 1).toFixed(6);
-      const maxQ = Math.max(1, Number(pool.maxQty) || 1).toFixed(6);
+      const minQNum = Math.max(1, Number(pool.minQty) || 1);
+      const maxQNum = Math.max(minQNum, Number(pool.maxQty) || 1);
+      const minQ = minQNum.toFixed(6);
+      const maxQ = maxQNum.toFixed(6);
       const minQual = Number(pool.minQual || 0).toFixed(6);
       const maxQual = Number(pool.maxQual || 0).toFixed(6);
       const useGuard = pool.bpOnlyIfCraftable !== false;
       const itemEntriesStr = pool.items.map((cls, idx) => {
-                const allowBp = !useGuard || canItemClassBeBlueprint(cls);
+        const allowBp = !useGuard || canItemClassBeBlueprint(cls);
         const effBpPct = allowBp ? (Number(pool.bpChancePct) || 0) : 0;
         const bpChance = Math.min(1, Math.max(0, effBpPct / 100)).toFixed(6);
         const forceBpStr = effBpPct >= 100 ? "True" : "False";
@@ -4950,11 +4987,39 @@
         const shortEntryName = cls.replace(/^PrimalItem(Structure|Resource|Consumable|Armor|Weapon)_|_C$/gi, '').slice(0, 28) || `Item_${idx+1}`;
         return `(EntryWeight=1.000000,ItemClassStrings=("${cls}"),ItemsWeights=(1.000000),MinQuantity=${minQ},MaxQuantity=${maxQ},MinQuality=${itemMinQual},MaxQuality=${itemMaxQual},bForceBlueprint=${forceBpStr},ChanceToBeBlueprintOverride=${bpChance},ItemEntryName="${shortEntryName}")`;
       }).join(',');
+      const itemSetStr = `(SetName="${setNameSafe}",MinNumItems=${minE},MaxNumItems=${maxE},NumItemsPower=1.000000,SetWeight=${setWeight},bItemsRandomWithoutReplacement=${noDupStr},ItemEntries=(${itemEntriesStr}))`;
       pool.crateClasses.forEach(crateCls => {
-        lines.push(`ConfigAddSupplyCrateItems=(SupplyCrateClassString="${crateCls}",ItemSets=((SetName="${setNameSafe}",MinNumItems=${minE},MaxNumItems=${maxE},NumItemsPower=1.000000,SetWeight=${setWeight},bItemsRandomWithoutReplacement=${noDupStr},ItemEntries=(${itemEntriesStr}))))`);
+        if (!setsByCrate.has(crateCls)) setsByCrate.set(crateCls, []);
+        setsByCrate.get(crateCls).push(itemSetStr);
       });
     });
+    const lines = [];
+    setsByCrate.forEach((setsArr, crateCls) => {
+      const setCount = setsArr.length;
+      lines.push(`ConfigOverrideSupplyCrateItems=(SupplyCrateClassString="${crateCls}",MinItemSets=${setCount},MaxItemSets=${setCount},NumItemSetsPower=1.000000,bSetsRandomWithoutReplacement=True,bAppendItemSets=True,ItemSets=(${setsArr.join(',')}))`);
+    });
     return lines;
+  }
+  function extractTopLevelParenBlocks(str) {
+    const blocks = [];
+    let depth = 0, start = -1, inQuote = false;
+    for (let i = 0; i < str.length; i++) {
+      const ch = str[i];
+      if (ch === '"' && str[i - 1] !== '\\') inQuote = !inQuote;
+      if (inQuote) continue;
+      if (ch === '(') {
+        if (depth === 0) start = i;
+        depth++;
+      } else if (ch === ')') {
+        if (depth === 0) break;
+        depth--;
+        if (depth === 0 && start !== -1) {
+          blocks.push(str.slice(start, i + 1));
+          start = -1;
+        }
+      }
+    }
+    return blocks;
   }
   function parseSupplyCrateIniLinesIntoPools(iniLines) {
     const groupedBySetName = {};
@@ -4962,44 +5027,66 @@
       const crateMatch = line.match(/SupplyCrateClassString\s*=\s*"([^"]+)"/i);
       if (!crateMatch) return;
       const crateCls = crateMatch[1].trim();
-      const setNameMatch = line.match(/SetName\s*=\s*"([^"]+)"/i);
-      const setName = setNameMatch ? setNameMatch[1].trim() : `Imported_Pool_${idx + 1}`;
-      const minEMatch = line.match(/MinNumItems\s*=\s*([0-9.]+)/i);
-      const maxEMatch = line.match(/MaxNumItems\s*=\s*([0-9.]+)/i);
-      const weightMatch = line.match(/SetWeight\s*=\s*([0-9.]+)/i);
-      const noDupMatch = line.match(/bItemsRandomWithoutReplacement\s*=\s*(True|False)/i);
-      const minQMatch = line.match(/MinQuantity\s*=\s*([0-9.]+)/i);
-      const maxQMatch = line.match(/MaxQuantity\s*=\s*([0-9.]+)/i);
-      const minQualMatch = line.match(/MinQuality\s*=\s*([0-9.]+)/i);
-      const maxQualMatch = line.match(/MaxQuality\s*=\s*([0-9.]+)/i);
-      const bpChanceMatch = line.match(/ChanceToBeBlueprintOverride\s*=\s*([0-9.]+)/i);
-      const items = [];
-      const clsRegex = /ItemClassStrings\s*=\s*\(\s*"([^"]+)"\s*\)/gi;
-      let m;
-      while ((m = clsRegex.exec(line)) !== null) {
-        if (!items.includes(m[1].trim())) items.push(m[1].trim());
+      let setBlocks = [];
+      const itemSetsIdx = line.search(/ItemSets\s*=\s*\(/i);
+      if (itemSetsIdx !== -1) {
+        const openIdx = line.indexOf('(', itemSetsIdx);
+        const outerArr = extractTopLevelParenBlocks(line.slice(openIdx));
+        if (outerArr.length > 0) {
+          const innerSets = outerArr[0].slice(1, -1);
+          setBlocks = extractTopLevelParenBlocks(innerSets);
+        }
       }
-      if (items.length === 0) return;
-      const groupKey = `${setName}::${items.join(',')}`;
-      if (!groupedBySetName[groupKey]) {
-        groupedBySetName[groupKey] = {
-          id: 'pool_' + Date.now() + '_' + idx,
-          setName,
-          crateClasses: [crateCls],
-          minEntries: minEMatch ? Math.round(parseFloat(minEMatch[1])) : 1,
-          maxEntries: maxEMatch ? Math.round(parseFloat(maxEMatch[1])) : 1,
-          setWeightPct: weightMatch ? Math.round(parseFloat(weightMatch[1]) * 100) : 100,
-          noDuplicates: noDupMatch ? noDupMatch[1].toLowerCase() === 'true' : true,
-          minQty: minQMatch ? Math.round(parseFloat(minQMatch[1])) : 1,
-          maxQty: maxQMatch ? Math.round(parseFloat(maxQMatch[1])) : 1,
-          bpChancePct: bpChanceMatch ? Math.round(parseFloat(bpChanceMatch[1]) * 100) : 0,
-          minQual: minQualMatch ? parseFloat(minQualMatch[1]) : 0,
-          maxQual: maxQualMatch ? parseFloat(maxQualMatch[1]) : 0,
-          items
-        };
-      } else if (!groupedBySetName[groupKey].crateClasses.includes(crateCls)) {
-        groupedBySetName[groupKey].crateClasses.push(crateCls);
-      }
+      if (setBlocks.length === 0) setBlocks = [line];
+      setBlocks.forEach((setBlock, sIdx) => {
+        const setNameMatch = setBlock.match(/SetName\s*=\s*"([^"]+)"/i);
+        const setName = setNameMatch ? setNameMatch[1].trim() : `Imported_Pool_${idx + 1}_${sIdx + 1}`;
+        const minEMatch = setBlock.match(/MinNumItems\s*=\s*([0-9.]+)/i);
+        const maxEMatch = setBlock.match(/MaxNumItems\s*=\s*([0-9.]+)/i);
+        const weightMatch = setBlock.match(/SetWeight\s*=\s*([0-9.]+)/i);
+        const noDupMatch = setBlock.match(/bItemsRandomWithoutReplacement\s*=\s*(True|False)/i);
+        const minQMatch = setBlock.match(/MinQuantity\s*=\s*([0-9.]+)/i);
+        const maxQMatch = setBlock.match(/MaxQuantity\s*=\s*([0-9.]+)/i);
+        let maxBpChance = 0;
+        const bpRegex = /ChanceToBeBlueprintOverride\s*=\s*([0-9.]+)/gi;
+        let bm;
+        while ((bm = bpRegex.exec(setBlock)) !== null) {
+          maxBpChance = Math.max(maxBpChance, parseFloat(bm[1]) || 0);
+        }
+        let maxMinQual = 0, maxMaxQual = 0;
+        const minQualRegex = /MinQuality\s*=\s*([0-9.]+)/gi;
+        const maxQualRegex = /MaxQuality\s*=\s*([0-9.]+)/gi;
+        let qm;
+        while ((qm = minQualRegex.exec(setBlock)) !== null) maxMinQual = Math.max(maxMinQual, parseFloat(qm[1]) || 0);
+        while ((qm = maxQualRegex.exec(setBlock)) !== null) maxMaxQual = Math.max(maxMaxQual, parseFloat(qm[1]) || 0);
+        const items = [];
+        const clsRegex = /ItemClassStrings\s*=\s*\(\s*"([^"]+)"\s*\)/gi;
+        let m;
+        while ((m = clsRegex.exec(setBlock)) !== null) {
+          if (!items.includes(m[1].trim())) items.push(m[1].trim());
+        }
+        if (items.length === 0) return;
+        const groupKey = `${setName}::${items.join(',')}`;
+        if (!groupedBySetName[groupKey]) {
+          groupedBySetName[groupKey] = {
+            id: 'pool_' + Date.now() + '_' + idx + '_' + sIdx,
+            setName,
+            crateClasses: [crateCls],
+            minEntries: minEMatch ? Math.round(parseFloat(minEMatch[1])) : 1,
+            maxEntries: maxEMatch ? Math.round(parseFloat(maxEMatch[1])) : 1,
+            setWeightPct: weightMatch ? Math.round(parseFloat(weightMatch[1]) * 100) : 100,
+            noDuplicates: noDupMatch ? noDupMatch[1].toLowerCase() === 'true' : true,
+            minQty: minQMatch ? Math.round(parseFloat(minQMatch[1])) : 1,
+            maxQty: maxQMatch ? Math.round(parseFloat(maxQMatch[1])) : 1,
+            bpChancePct: Math.round(maxBpChance * 100),
+            minQual: maxMinQual,
+            maxQual: maxMaxQual,
+            items
+          };
+        } else if (!groupedBySetName[groupKey].crateClasses.includes(crateCls)) {
+          groupedBySetName[groupKey].crateClasses.push(crateCls);
+        }
+      });
     });
     const existingDrafts = supplyCrateLootPools.filter(p => p && p.isDraft);
     supplyCrateLootPools = [...Object.values(groupedBySetName), ...existingDrafts];
@@ -5035,7 +5122,7 @@
     if (previewEl) {
       previewEl.value = lootLines.length > 0
         ? lootLines.join('\n')
-        : "; No active Loot Pools (ConfigAddSupplyCrateItems) configured yet.";
+        : "; No active Loot Pools (ConfigOverrideSupplyCrateItems) configured yet.";
     }
     if (countEl) countEl.textContent = supplyCrateLootPools.length;
     const query = (document.getElementById('lootPoolsSearch')?.value || '').toLowerCase().trim();
@@ -5078,7 +5165,7 @@
           </div>
         </div>
         <div class="mod-actions">
-          ${showAdminBoxBtn ? `<button class="icon-btn btn-primary" onclick="copyAdminBoxSpawnForPool('${pool.id}')" title="Zkopíruje příkaz (cheat giveitem ... | ...), kterým si všechny položky tohoto balíčku hodíš do inventáře a jedním klikem (Transfer All) jimi naplníš MysteryCrateAdminBox ve hře!">📋 Spawn pro AdminBox</button>` : ``}
+          ${showAdminBoxBtn ? `<button class="icon-btn btn-primary" onclick="copyAdminBoxSpawnForPool('${pool.id}')" title="Copies a batch command (cheat giveitem ... | ...) to spawn all items from this pool into your inventory so you can Transfer All into the MysteryCrateAdminBox in-game!">📋 Spawn for AdminBox</button>` : ``}
           <button class="icon-btn ${pool.isDraft ? 'btn-success' : 'btn-warn'}" onclick="toggleLootPoolDraftState('${pool.id}')" title="${pool.isDraft ? 'Activate this draft (will be written to Game.ini)' : 'Move to drafts (temporarily excludes from Game.ini without deleting)'}">${pool.isDraft ? '▶️ Activate' : '📝 To Drafts'}</button>
           <button class="icon-btn" onclick="openLootModalEdit('${pool.id}')" title="Edit this Loot Pool">✏️</button>
           <button class="icon-btn btn-danger" onclick="deleteLootPool('${pool.id}')" title="Delete this Loot Pool">✖</button>
@@ -5096,7 +5183,7 @@
       return `cheat gfi ${cls.replace(/_C$/i, '')} 1 0 0`;
     });
     navigator.clipboard.writeText(cmds.join(' | ')).then(() => {
-      showToast(`📋 Zkopírován příkaz pro ${cmds.length} položek! Ve hře dej Ctrl+V do konzole a pak v MysteryCrateAdminBox klikni na Transfer All!`);
+      showToast(`📋 Copied spawn command for ${cmds.length} items! Paste into the in-game console (Ctrl+V), then click Transfer All in MysteryCrateAdminBox!`);
     });
   }
     function openLootModalSingleHiddenBp(itemClass, displayTitle) {
@@ -5158,7 +5245,7 @@
     editingLootPoolId = null;
     currentLootModalItems = items;
     currentLootModalCrates = new Set();
-    document.getElementById('lootModalSetName').value = `${firstModName}_Pool_${items.length}ks`;
+    document.getElementById('lootModalSetName').value = `${firstModName}_Pool_${items.length}items`;
     document.getElementById('lootModalMinEntries').value = 1;
     document.getElementById('lootModalMaxEntries').value = 1;
     document.getElementById('lootModalSetWeightPct').value = 100;
@@ -5438,9 +5525,9 @@
     } else if (mode === 'DOUBLE') {
       visible.filter(k => k.cls.includes('_Double_C')).forEach(k => currentLootModalCrates.add(k.cls));
     } else if (mode === 'BEACONS') {
-      visible.filter(k => k.group.includes('Paprsky') || k.cls.includes('SupplyCrate_Level')).forEach(k => currentLootModalCrates.add(k.cls));
+      visible.filter(k => k.group === 'BEACONS' || k.cls.includes('SupplyCrate_Level')).forEach(k => currentLootModalCrates.add(k.cls));
     } else if (mode === 'CAVES_OCEAN') {
-      visible.filter(k => k.group.includes('Podmořské')).forEach(k => currentLootModalCrates.add(k.cls));
+      visible.filter(k => k.group === 'CAVES_OCEAN').forEach(k => currentLootModalCrates.add(k.cls));
     }
     renderLootModalCratesCheckboxes();
   }
@@ -5671,7 +5758,7 @@
       container.appendChild(pill);
     });
   }
-      function saveLootPoolFromModal(asDraft = false) { pushHistorySnapshot("Ulozeni Loot balicku");
+      function saveLootPoolFromModal(asDraft = false) { pushHistorySnapshot("Save Loot Pool");
     if (!asDraft) {
       if (currentLootModalCrates.size === 0) {
         alert("Select at least one target crate/drop in Step 3 (or click '📝 Save as Draft' to finish it later)!");
@@ -5790,7 +5877,7 @@
       showToast("⚠️ This draft does not have target crates or items selected yet — complete them in the modal and save as active!");
       return;
     }
-    pushHistorySnapshot(pool.isDraft ? `Aktivace balíčku ${pool.setName}` : `Přesun do konceptů: ${pool.setName}`);
+    pushHistorySnapshot(pool.isDraft ? `Activate pool ${pool.setName}` : `Move to drafts: ${pool.setName}`);
     pool.isDraft = !pool.isDraft;
     hasUnsavedGameIniChanges = true;
     saveRulesToLocalStorage();
@@ -5815,7 +5902,7 @@
     const p = supplyCrateLootPools.find(x => x.id === poolId);
     if (!p) return;
     if (!confirm(`Are you sure you want to delete loot pool "${p.setName}"?`)) return;
-    pushHistorySnapshot(`Smazání balíčku ${p.setName}`);
+    pushHistorySnapshot(`Delete pool ${p.setName}`);
     supplyCrateLootPools = supplyCrateLootPools.filter(x => x.id !== poolId);
     hasUnsavedGameIniChanges = true;
     saveRulesToLocalStorage();
@@ -5837,7 +5924,7 @@
       : ["SupplyCrate_OceanInstant_C", "SupplyCrate_OceanInstant_High_C", "SupplyCrate_Desert_C", "SupplyCrate_Cave_QualityTier2_C", "SupplyCrate_Cave_QualityTier3_C", "SupplyCrate_Cave_QualityTier4_C"];
     supplyCrateLootPools.push({
       id: 'pool_mc_' + Date.now(),
-      setName: targetType === 'TREASURE' ? 'MysteryCrates_v_Bobovych_Pokladech' : 'MysteryCrates_v_Jeskynich_a_Oceanu',
+      setName: targetType === 'TREASURE' ? 'MysteryCrates_Buried_Treasures' : 'MysteryCrates_Caves_and_Ocean',
       crateClasses: crates,
       minEntries: 1,
       maxEntries: 1,
@@ -5854,12 +5941,12 @@
     saveRulesToLocalStorage();
     renderLootPoolsTab();
     renderGameIniRules();
-    showToast("📦 Balíček se 6 rozbalovacími Mystery Crates byl přidán!");
+    showToast("📦 Pool with all 6 consumable Mystery Crates added!");
   }
   function copyLootIniLinesOnly() {
     const val = document.getElementById('outputLootIniPreview').value;
     navigator.clipboard.writeText(val).then(() => {
-      showToast("📋 ConfigAddSupplyCrateItems lines copied to clipboard!");
+      showToast("📋 ConfigOverrideSupplyCrateItems lines copied to clipboard!");
     });
   }
 
@@ -5938,7 +6025,18 @@
       }
       const cachedDb = localStorage.getItem('asa_mod_db_cache_v10');
       if (cachedDb) {
-        modDatabase = { ...PRELOADED_DB, ...JSON.parse(cachedDb) };
+        const parsedCachedDb = JSON.parse(cachedDb);
+        modDatabase = { ...PRELOADED_DB, ...parsedCachedDb };
+        try {
+          const savedKnown = localStorage.getItem('asa_known_mod_names_v10');
+          if (savedKnown) knownModNames = JSON.parse(savedKnown);
+        } catch(e) {}
+        if (Object.keys(parsedCachedDb).some(id => id !== 'VANILLA_ARK' && !PRELOADED_DB[id])) {
+          hasLoadedLibraryJson = true;
+        }
+        Object.values(parsedCachedDb).forEach(m => {
+          if (m && m.id && m.name && m.id !== 'VANILLA_ARK') knownModNames[m.id] = m.name;
+        });
       }
       Object.keys(userTierOverrides).forEach(modId => {
         if (modDatabase[modId]) {
@@ -6125,31 +6223,31 @@
     { group: "🛡️ 10. Vanilla Armor (Chitin, Flak, Riot, Ghillie, Hazard, Tek)", cls: "PrimalItemArmor_TekPants_C", label: "Tek Leggings" },
     { group: "🛡️ 10. Vanilla Armor (Chitin, Flak, Riot, Ghillie, Hazard, Tek)", cls: "PrimalItemArmor_TekBoots_C", label: "Tek Boots" },
     { group: "🛡️ 10. Vanilla Armor (Chitin, Flak, Riot, Ghillie, Hazard, Tek)", cls: "PrimalItemArmor_TekGloves_C", label: "Tek Gauntlets" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_RexSaddle_C", label: "Rex Saddle (Sedlo na Rexe)" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_RexSaddle_C", label: "Rex Saddle" },
     { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_RexSaddle_Tek_C", label: "Rex Tek Saddle" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_GigaSaddle_C", label: "Giganotosaurus Saddle (Sedlo na Gigu)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_CarchaSaddle_C", label: "Carcharodontosaurus Saddle (Sedlo na Carchu)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_YutySaddle_C", label: "Yutyrannus Saddle (Sedlo na Yutyranna)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_SpinoSaddle_C", label: "Spino Saddle (Sedlo na Spina)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_TherizinosaurusSaddle_C", label: "Therizinosaurus Saddle (Sedlo na Therizina)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_ArgentavisSaddle_C", label: "Argentavis Saddle (Sedlo na Argentavise)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_PteroSaddle_C", label: "Pteranodon Saddle (Sedlo na Pteranodona)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_QuetzSaddle_C", label: "Quetzal Saddle (Sedlo na Quetzala)" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_GigaSaddle_C", label: "Giganotosaurus Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_CarchaSaddle_C", label: "Carcharodontosaurus Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_YutySaddle_C", label: "Yutyrannus Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_SpinoSaddle_C", label: "Spino Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_TherizinosaurusSaddle_C", label: "Therizinosaurus Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_ArgentavisSaddle_C", label: "Argentavis Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_PteroSaddle_C", label: "Pteranodon Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_QuetzSaddle_C", label: "Quetzal Saddle" },
     { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_QuetzSaddle_Platform_C", label: "Quetzal Platform Saddle" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_RhynioSaddle_C", label: "Rhyniognatha Saddle (Sedlo na Rhyniognathu)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_AnkyloSaddle_C", label: "Ankylo Saddle (Sedlo na Ankylosaura)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_DoedSaddle_C", label: "Doedicurus Saddle (Sedlo na Doedicura)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_MammothSaddle_C", label: "Mammoth Saddle (Sedlo na Mamuta)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_BeaverSaddle_C", label: "Castoroides Saddle (Sedlo na Bobra)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_ThylacoSaddle_C", label: "Thylacoleo Saddle (Sedlo na Thylacolea)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_BaryonyxSaddle_C", label: "Baryonyx Saddle (Sedlo na Baryonyxe)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_DaeodonSaddle_C", label: "Daeodon Saddle (Sedlo na Daeodona)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_MegatheriumSaddle_C", label: "Megatherium Saddle (Sedlo na Megatherium)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_BasiloSaddle_C", label: "Basilosaurus Saddle (Sedlo na Basilosaura)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_MosaSaddle_C", label: "Mosasaur Saddle (Sedlo na Mosasaura)" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_RhynioSaddle_C", label: "Rhyniognatha Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_AnkyloSaddle_C", label: "Ankylo Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_DoedSaddle_C", label: "Doedicurus Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_MammothSaddle_C", label: "Mammoth Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_BeaverSaddle_C", label: "Castoroides Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_ThylacoSaddle_C", label: "Thylacoleo Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_BaryonyxSaddle_C", label: "Baryonyx Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_DaeodonSaddle_C", label: "Daeodon Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_MegatheriumSaddle_C", label: "Megatherium Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_BasiloSaddle_C", label: "Basilosaurus Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_MosaSaddle_C", label: "Mosasaur Saddle" },
     { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_MosaSaddle_Tek_C", label: "Mosasaur Tek Saddle" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_TusoSaddle_C", label: "Tusoteuthis Saddle (Sedlo na Krakatice Tuso)" },
-    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_MegalodonSaddle_C", label: "Megalodon Saddle (Sedlo na Megalodona)" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_TusoSaddle_C", label: "Tusoteuthis Saddle" },
+    { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_MegalodonSaddle_C", label: "Megalodon Saddle" },
     { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_RockGolemSaddle_C", label: "Rock Elemental Saddle (SE)", dlc: "SCORCHED" },
     { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_MantisSaddle_C", label: "Mantis Saddle (SE)", dlc: "SCORCHED" },
     { group: "🦖 11. Creature Saddles (Vanilla & DLC)", cls: "PrimalItemArmor_FasolaSaddle_C", label: "Fasolasuchus Saddle (SE)", dlc: "SCORCHED" },
@@ -6172,10 +6270,10 @@
     { group: "🎟️ 12. Bob's Tales, Tides of Fortune, Lost Colony, Dragontopia & Fantastic Tames", cls: "PrimalItemStructure_TrainEngine_C", label: "Train Engine (Bob's Tall Tales: Frontier)", dlc: "BOB_ONLY" },
     { group: "🎟️ 12. Bob's Tales, Tides of Fortune, Lost Colony, Dragontopia & Fantastic Tames", cls: "PrimalItemStructure_TrainCar_Platform_C", label: "Train Platform Car (Bob's Tall Tales: Frontier)", dlc: "BOB_ONLY" },
     { group: "🎟️ 12. Bob's Tales, Tides of Fortune, Lost Colony, Dragontopia & Fantastic Tames", cls: "PrimalItemArmor_OasisaurSaddle_C", label: "Oasisaur Saddle (Bob's Tall Tales: Frontier)", dlc: "BOB_ONLY" },
-    { group: "🎟️ 12. Bob's Tales, Tides of Fortune, Lost Colony, Dragontopia & Fantastic Tames", cls: "PrimalItemStructure_Zeppelin_C", label: "Sir-5rM8 / Zeppelin Hangar (Bob's Tall Tales: Steampunk)", dlc: "BOB_ONLY" },
+    { group: "🎟️ 12. Bob's Tales, Tides of Fortune, Lost Colony, Dragontopia & Fantastic Tames", cls: "PrimalItemStructure_Zeppelin_C", label: "Zeppelin (Bob's Tall Tales: Steampunk)", dlc: "BOB_ONLY" },
     { group: "🎟️ 12. Bob's Tales, Tides of Fortune, Lost Colony, Dragontopia & Fantastic Tames", cls: "PrimalItemStructure_TinkerDesk_C", label: "Tinkering Desk (Bob's Tall Tales: Steampunk)", dlc: "BOB_ONLY" },
     { group: "🎟️ 12. Bob's Tales, Tides of Fortune, Lost Colony, Dragontopia & Fantastic Tames", cls: "PrimalItemStructure_TeslaCoil_C", label: "Tesla Coil (Bob's Tall Tales: Steampunk)", dlc: "BOB_ONLY" },
-    { group: "🎟️ 12. Bob's Tales, Tides of Fortune, Lost Colony, Dragontopia & Fantastic Tames", cls: "PrimalItem_WeaponStopwatch_C", label: "Temporal Gosse / Stopwatch (Bob's Tall Tales: Steampunk)", dlc: "BOB_ONLY" },
+    { group: "🎟️ 12. Bob's Tales, Tides of Fortune, Lost Colony, Dragontopia & Fantastic Tames", cls: "PrimalItem_WeaponStopwatch_C", label: "Stopwatch (Bob's Tall Tales: Steampunk)", dlc: "BOB_ONLY" },
     { group: "🎟️ 12. Bob's Tales, Tides of Fortune, Lost Colony, Dragontopia & Fantastic Tames", cls: "PrimalItem_WeaponThrowingSpear_C", label: "Explosive Spear (Bob's Tall Tales: Wasteland)", dlc: "BOB_ONLY" },
     { group: "🎟️ 12. Bob's Tales, Tides of Fortune, Lost Colony, Dragontopia & Fantastic Tames", cls: "PrimalItemStructure_Shipyard_Tides_C", label: "Pirate Shipyard (Bob's True Tales: Tides of Fortune)", dlc: "TIDES_OF_FORTUNE" },
     { group: "🎟️ 12. Bob's Tales, Tides of Fortune, Lost Colony, Dragontopia & Fantastic Tames", cls: "PrimalItem_WeaponFlintlockPistol_C", label: "Pirate Flintlock Pistol (Tides of Fortune)", dlc: "TIDES_OF_FORTUNE" },
@@ -6255,14 +6353,11 @@
     const keptLines = [];
     for (let i = 0; i < existingLines.length; i++) {
       const line = existingLines[i];
-      if (i < 2) {
-        keptLines.push(line);
-        continue;
-      }
       const trimmed = line.trim();
       if (/^OverrideNamedEngramEntries\s*=/i.test(trimmed)) continue;
       if (/^ConfigOverrideItemCraftingCosts\s*=/i.test(trimmed)) continue;
       if (/^ConfigAddSupplyCrateItems\s*=/i.test(trimmed)) continue;
+      if (/^ConfigOverrideSupplyCrateItems\s*=/i.test(trimmed) && /bAppendItemSets\s*=\s*True/i.test(trimmed)) continue;
       keptLines.push(line);
     }
     if (generatedLines.length === 0) {
@@ -7909,6 +8004,8 @@
 </script>
 </body>
 </html>
+
+
 
 
 
